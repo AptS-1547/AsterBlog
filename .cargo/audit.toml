@@ -1,0 +1,18 @@
+# cargo-audit 配置
+# 忽略已确认不影响本项目的上游传递依赖 advisory
+
+[advisories]
+ignore = [
+    # rsa 0.9.x Marvin Attack (timing sidechannel) — 传递依赖 (sqlx-mysql, jsonwebtoken)
+    # 本项目 JWT 使用 HMAC 签名，不做 RSA PKCS#1 v1.5 解密，无攻击面
+    # 上游状态：rsa crate 尚无修复版本
+    "RUSTSEC-2023-0071",
+
+    # paste 1.0.x unmaintained — dtolnay 不再维护
+    # 纯编译期宏，零运行时代码，无安全风险
+    "RUSTSEC-2024-0436",
+
+    # rand 0.8.x unsound with custom logger — 传递依赖 (sqlx, actix-multipart, jsonwebtoken)
+    # 本项目直接依赖 rand 0.10，0.8 为上游间接引入；触发条件为自定义 logger 内调用 rand::rng()，不适用
+    "RUSTSEC-2026-0097",
+]

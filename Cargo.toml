@@ -1,0 +1,52 @@
+[package]
+name = "aster_blog"
+version = "0.0.1-alpha.0"
+description = "A self-hosted blogging platform built with Rust, designed for performance, security, and extensibility."
+authors = [
+    "AptS-1547 <apts-1547@esaps.net>",
+    "AptS-1548 <apts-1548@esaps.net>",
+    "AptS-1738 <apts-1738@esaps.net>",
+]
+repository = "https://github.com/AptS-1547/AsterBlog"
+license = "MIT"
+edition = "2024"
+rust-version = "1.85.0"
+
+# 优化配置
+[profile.dev]
+opt-level = 1
+lto = false
+codegen-units = 16
+panic = "unwind"
+strip = false
+incremental = true
+
+[profile.release]
+opt-level = 2
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.release-debug]
+inherits = "release"
+codegen-units = 1
+debug = true
+strip = false
+lto = false
+
+[profile.release-performance]
+inherits = "release"
+opt-level = 2
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[dependencies]
+
+[dev-dependencies]
+
+[build-dependencies]
+
+[lib]
+doctest = false

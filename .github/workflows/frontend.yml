@@ -1,0 +1,62 @@
+name: Frontend CI
+
+on:
+  push:
+    paths:
+      - 'admin-panel/**'
+      - 'scripts/coverage-summary.mjs'
+      - '.github/workflows/frontend.yml'
+    branches: [master]
+  pull_request:
+    paths:
+      - 'admin-panel/**'
+      - 'scripts/coverage-summary.mjs'
+      - '.github/workflows/frontend.yml'
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        working-directory: admin-panel
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        working-directory: admin-panel
+        run: bun run check
+
+      - name: Run tests with coverage
+        working-directory: admin-panel
+        run: bun run test:coverage
+
+      - name: Publish coverage summary
+        if: always() && hashFiles('admin-panel/coverage/lcov.info') != ''
+        run: bun scripts/coverage-summary.mjs "Frontend" admin-panel/coverage/lcov.info
+
+      - name: Upload coverage reports to Codecov
+        if: always() && hashFiles('admin-panel/coverage/lcov.info') != ''
+        uses: codecov/codecov-action@v5
+        with:
+          files: admin-panel/coverage/lcov.info
+          flags: frontend
+          name: admin-panel
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: frontend-coverage
+          if-no-files-found: ignore
+          path: admin-panel/coverage
