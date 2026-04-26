@@ -10,7 +10,7 @@ authors = [
 repository = "https://github.com/AptS-1547/AsterBlog"
 license = "MIT"
 edition = "2024"
-rust-version = "1.85.0"
+rust-version = "1.91.1"
 
 # 优化配置
 [profile.dev]
@@ -42,7 +42,38 @@ codegen-units = 1
 panic = "abort"
 strip = true
 
+
+
 [dependencies]
+actix-web = { version = "4.13.0", features = ["compress-brotli", "compress-gzip"] }
+api-docs-macros = { path = "api-docs-macros" }
+argon2 = "0.5.3"
+aws-credential-types = { version = "1.2.14", features = ["hardcoded-credentials"] }
+aws-sdk-s3 = { version = "1.131.0", default-features = false, features = ["sigv4a", "http-1x", "default-https-client", "rt-tokio"] }
+aws-smithy-http = "0.63"
+clap = { version = "4", features = ["derive", "env"], optional = true }
+dotenvy = "0.15"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "gif", "webp", "bmp", "tiff"] }
+jsonwebtoken = { version = "10", features = ["rust_crypto"] }
+moka = { version = "0.12.15", features = ["future"] }
+prometheus = { version = "0.14", optional = true, default-features = false }
+rand = { version = "0.10.1", default-features = false, features = ["std", "std_rng", "thread_rng"] }
+redis = { version = "1.2.0", features = ["connection-manager", "tokio-comp", "tokio-rustls-comp"] }
+rust-embed = "8"
+sea-orm = { version = "~2.0.0-rc.38", features = ["sqlx-mysql", "sqlx-postgres", "sqlx-sqlite", "macros", "runtime-tokio-rustls"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+serde_repr = "0.1.20"
+sysinfo = { version = "0.38", optional = true, default-features = false, features = ["system"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal", "fs", "io-util"] }
+tokio-util = { version = "0.7", features = ["io", "io-util"] }
+tracing = { version = "0.1.44", default-features = false}
+tracing-appender = "0.2.5"
+tracing-subscriber = { version = "0.3.23", default-features = false, features = ["ansi", "env-filter", "fmt", "json"] }
+utoipa = { version = "5.4.0", features = ["chrono", "actix_extras", "repr"], optional = true }
+utoipa-swagger-ui = { version = "9.0.2", features = ["actix-web"], optional = true }
+uuid = { version = "1", features = ["v4"] }
+zip = { version = "8", default-features = false, features = ["deflate"] }
 
 [dev-dependencies]
 
